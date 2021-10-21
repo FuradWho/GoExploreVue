@@ -1,0 +1,204 @@
+.bbc-content{
+	background: #FFFFFF;
+	border: 1px solid #BBBBBB;
+	box-shadow: 0 0 9px 0 rgba(0,0,0,0.20);
+	border-radius:0 0 14px 14px;
+	min-height: 300px;
+	padding: 20px 20px;
+}
+.bbc-form{
+	height: 40px;
+	width: 100%;
+	/* background-image: linear-gradient(180deg, #3B75B2 0%, #0C447B 100%); */
+	background: #333a4d;
+	border-bottom: 1px solid #272727;
+}
+.bbc-form.bbc-buttonaaa{
+	/* background: url('./img/bottom.png') center bottom no-repeat; */
+	background: #333a4d;
+}
+.bbc-form .form-list li{
+		padding: 0 20px;
+		float: left;
+		line-height: 40px;
+		height: 40px;
+		color: #FFFFFF;
+		cursor: pointer;
+}
+
+.bbc-form .bbc-button{
+	padding: 0 15px;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	color: #FFFFFF;
+	border-radius: 10px;
+	margin-top: 5px;
+	cursor: pointer;
+	background-image: linear-gradient(180deg, #4E7FB3 0%, #3368A5 44%, #215796 53%, #195186 100%);
+	box-shadow: 0 0 2px 0 rgba(0,0,0,0.60);
+	border-radius: 2px;
+	border-radius: 2px;
+	margin-left: 10px;
+	position: relative;
+}
+
+.bbc-form .bbc-button:hover ul{
+	z-index: 100;
+	display: block;
+}
+
+.bbc-form .bbc-button ul:hover{
+	display: block;
+}
+
+
+.bbc-form .bbc-button ul{
+	position: absolute;
+	width: 100%;
+	left: 0px;;
+	display: none;
+	top: 30px;
+	background: #3368A5;
+	border-radius: 4px;
+}
+.bbc-form .bbc-button ul li{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.bbc-form .bbc-button.disabled{
+	color: #7397bc;
+	cursor: unset;
+
+}
+
+.bbc-form .form-list li.active{
+	background: #00ba89;
+	padding-left: 25px;
+	border-radius: 25px 0 0 0;
+}
+.node-bbc{
+	height: 100%;
+	margin: 0 auto;
+}
+.bbc-top{
+	background: url('./img/top.png') no-repeat;
+	background: #333a4d;
+	background-size: cover;
+	border-radius: 15px 15px 0 0;
+	border-radius: 15px 15px 0px 0px;
+	line-height: 62px;
+	height: 62px;
+	font-size: 22px;
+	color: #FFFFFF;
+	text-indent: 40px;
+}
+
+.bbc-box .bbc-title{
+		height: 48px;
+		line-height: 48px;
+		background: #ffffff;
+		border-bottom: 1px solid #ddd;
+		text-indent: 15px;
+		background: #F3F8FF;
+		border: 1px solid #DDDDDD;
+		border-radius: 2px 2px 0 0;
+		border-radius: 2px 2px 0px 0px;
+}
+
+.bbc-box .bbc-title i {
+	font-size: 18px;
+	margin-right: 20px;
+}
+
+.bbc-box .bbc-contact{
+	background: #ffffff;
+	padding-top: 30px;
+	min-height: 100px;
+	background: #FFFFFF;
+	border: 1px solid #DDDDDD;
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+	border-radius: 2px;
+	border-radius: 2px;
+	border-top: none;
+	padding-bottom: 30px;
+}
+.demo-table{
+	table-layout: fixed;
+	 width: 100%;
+	 border-collapse:collapse;
+	 text-align: center;
+ }
+ 
+ .demo-table .fcolor1{
+	color: #333;
+	background: #f6f6f6;
+ }
+ .bordertop-bg{
+	background: #152055;
+ }
+ .bordertop-bg > td{
+	color: #FFF !important;
+ }
+ .demo-table tr.color1{
+	background: #f6f6f6;
+	color: #333;
+ }
+ 
+ .demo-table tr.color1 td{
+	color: #333;
+ }
+ 
+ .demo-table tr.noborder.bordertop td{
+	border-bottom:1px solid #ccc;
+ }
+ 
+ 
+ .demo-table tr.noborder td{
+	border:1px solid transparent;
+ }
+ 
+ .demo-table td{
+	height: 40px;
+	line-height: 40px;
+	font-family: PingFangSC-Regular;
+	font-size: 15px;
+	color: #333333;
+	letter-spacing: 0;
+	line-height: 40px;
+ }
+ 
+ .demo-table td input{
+	width: 100%;
+	height: 100%;
+	border: none;
+	text-align: center;
+ }
+ 
+ .demo-table td.color1{
+	background: #f6f6f6;
+	color: #333;
+ }
+ 
+ .demo-table th{
+	height: 30px;
+	line-height: 30px;
+	background: #E3F4EB;
+	font-family: PingFangSC-Medium;
+	font-size: 16px;
+	color: #333333;
+	letter-spacing: 0;
+	line-height: 28px;
+ }
+ 
+ .demo-table input.blue{
+	color: blue;
+ }
+ 
+ .demo-table,.demo-table td,.demo-table th{
+	 border:1px solid #ccc;
+ }
