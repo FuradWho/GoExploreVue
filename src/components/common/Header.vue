@@ -156,25 +156,6 @@ export default {
 			} else {
 				this.isLogin = false;
 			}
-			this.getPoint();
-		},
-		/**
-		 * @name: zhangln
-		 * @msg: 获取ip地址
-		 */
-		getPoint () {
-			this.$ajax({
-				method: 'post',
-				url: '/user/getUserSocketIoIp'
-			}).then(res => {
-				if (res.success) {
-					let socketIP = res.socketIoIp + ':' + res.socketIoPort;
-					this.$storage.set('socketIP', socketIP);
-					this.$storage.set('resUrl', res.resUrl + '/pages/view/documentView?resourceID='); // 用户ID
-					this.$storage.set('ossUrl', res.ossUrl); // 用户ID
-					this.$storage.set('baseUrl', res.resUrl); // 用户ID
-				}
-			});
 		},
 		_handleRouter (item) {
 			if (item.routerName === 'user') {

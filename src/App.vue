@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import moocHeader from '#/common/Header';
+import moocHeader from './components/common/Header';
 export default {
 	name: 'App',
 	data () {

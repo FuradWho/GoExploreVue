@@ -35,18 +35,18 @@
 		<div class="tabBox">
 			<div class="tabLeft">
 				<div class="listTitle row">
-					<div class="col-1">索引</div>
-					<div class="col-1">交易数量</div>
-					<div class="col-1">通道</div>
-					<div class="col-1">Data哈希</div>
-					<div class="col-1">时间</div>
+					<div class="listBoxA">索引</div>
+					<div class="listBoxA">交易数量</div>
+					<div class="listBoxA">preHash</div>
+					<div class="listBoxA">Data哈希</div>
+					<div class="listBoxA">时间</div>
 				</div>
 				<div class="listMain row" v-for="(item,index) in tabList" :key="index">
-					<h1 v-html="item.xml" class="col-1 greenTxt"></h1>
-					<h1 v-html="item.number" class="col-1 txtA"></h1>
-					<h1 v-html="item.deal" class="col-1 txtA"></h1>
-					<h1 v-html="item.size" class="col-1 txtA"></h1>
-					<h1 v-html="item.time" class="col-1 txtA"></h1>
+					<h1 v-html="item.number" class="mainBoxA greenTxt"></h1>
+					<h1 v-html="item.txNum" class="mainBoxA txtA"></h1>
+					<h1 v-html="item.previousHash" class="mainBoxA txtA"></h1>
+					<h1 v-html="item.blockHash" class="mainBoxA txtA "></h1>
+					<h1 v-html="item.createTime" class="mainBoxA txtA"></h1>
 				</div>
 			</div>
 			<div class="tabLeft">
@@ -56,11 +56,11 @@
 					<div class="col-1">通道</div>
 					<div class="col-1">时间</div>
 				</div>
-				<div class="listMain row" v-for="(item,index) in tabList" :key="index">
-					<h1 v-html="item.id" class="col-1 greenTxt"></h1>
-					<h1 v-html="item.money" class="col-1 txtA"></h1>
-					<h1 v-html="item.time2" class="col-1 txtA"></h1>
-					<h1 v-html="item.size2" class="col-1 txtA"></h1>
+				<div class="listMain row" v-for="(item,index) in tabList2" :key="index">
+					<h1 v-html="item.txId" class="col-1 greenTxt"></h1>
+					<h1 v-html="item.chaincodeId" class="col-1 txtA "></h1>
+					<h1 v-html="item.channelId" class="col-1 txtA "></h1>
+					<h1 v-html="item.timestamp" class="col-1 txtA"></h1>
 				</div>
 			</div>
 		</div>
@@ -99,17 +99,8 @@ export default {
 					txt2: ''
 				}
 			],
-			tabList: [{
-				xml: '431,099',
-				time: '',
-				deal: '0',
-				size: '697字节',
-				number: '12',
-				id: '321',
-				size2: '341',
-				time2: '2',
-				money: '1.07'
-			}]
+			tabList: [],
+      tabList2:[]
 		};
 	},
 	components: {
@@ -220,6 +211,23 @@ export default {
 					}
 				});
 			});
+			this.$ajax({
+				method: 'get',
+				url: 'blocks/QueryLastesBlocksInfo',
+			}).then(res =>{
+        console.log(res)
+        this.tabList = res;
+        for (let i=0; i <res.length;i++){
+          let arr2 = res[i].transactionList;
+          for (let i=0; i <arr2.length; i ++){
+            let arr3 = arr2[i].transactionActionList;
+            for (let i=0; i <arr3.length; i ++){
+              this.tabList2.push(arr3[i]);
+            }
+          }
+        }
+        console.log(this.tabList2)
+      });
 		},
 		gotoRouter (routerLink) {
 			this.$router.push({name: routerLink});
@@ -237,6 +245,9 @@ outline: green;
 }
 .col-1{
 	flex: 1;
+}
+.col-2{
+  flex: 2;
 }
 .index{
 	padding-top: 60px;
@@ -444,16 +455,32 @@ outline: green;
 					color: #8698a0;
 					margin-bottom: 15px;
 					text-align: center;
+          .listBoxA{
+            width: 147px;
+            text-align: center;
+          }
 				}
 			}
 			.listMain{
 				width: 590px;
 				height: 50px;
+        margin-bottom: 15px;
 				border-radius: 8px;
 				line-height: 50px;
 				background: #676c77;
+        .mainBoxA{
+          width: 147px;
+          text-align: center;
+        }
 				.col-1{
-					text-align: center;
+          font-size: 15px;
+          color: #fff;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          text-align: center;
+          -webkit-box-orient: vertical;
+          font-family: fontMedium;
 				}
 				.greenTxt{
 					font-size: 15px;
@@ -463,7 +490,15 @@ outline: green;
 				.txtA{
 					font-size: 15px;
 					color: #fff;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
 					font-family: fontMedium;
+          &:hover{
+            overflow: visible;
+            white-space: inherit;
+          }
 				}
 			}
 		}

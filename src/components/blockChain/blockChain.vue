@@ -15,20 +15,18 @@
 		<div class="listBox">
 			<div class="listTitle row">
 				<div class="col-1">索引</div>
-				<div class="col-1">时间</div>
-				<div class="col-1">大小</div>
-				<div class="col-1">交易</div>
-				<div class="col-1">系统费</div>
-				<div class="col-1">网络费</div>
+				<div class="col-2">blockHash</div>
+				<div class="col-2">preHash</div>
+        <div class="col-3">交易</div>
+        <div class="col-1">时间</div>
 			</div>
 		</div>
 		<div class="listMain row" v-for="(item,index) in listArr" :key="index">
-			<div class="col-1 greenTxt" v-html="item.id"></div>
-			<div class="col-1 fffTxt" v-html="item.time"></div>
-			<div class="col-1 fffTxt" v-html="item.size"></div>
-			<div class="col-1 fffTxt" v-html="item.deal"></div>
-			<div class="col-1 fffTxt" v-html="item.money1"></div>
-			<div class="col-1 fffTxt" v-html="item.money2"></div>
+			<div class="col-1 greenTxt" v-html="item.number"></div>
+			<div class="col-2 fffTxt" v-html="item.blockHash"></div>
+			<div class="col-2 fffTxt" v-html="item.previousHash"></div>
+      <div class="col-3 fffTxt" v-html="item.txNum"></div>
+      <div class="col-1 fffTxt" v-html="item.createTime"></div>
 		</div>
 		<div class="footBut">
 			<div class="ye">
@@ -62,80 +60,7 @@ export default {
 			// },
 			homePage: true, // 是否是首页
 			endPage: false, // 是否为尾页
-			listArr: [
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				}
-			],
+			listArr: [],
 			pages: [
 				{
 					txt: '1'
@@ -146,8 +71,18 @@ export default {
 	components: {
 	},
 	created () {
+    this.init();
 	},
 	methods: {
+    init(){
+      this.$ajax({
+        method: 'get',
+        url: 'blocks/QueryAllBlocksInfo',
+      }).then(res =>{
+        console.log(res)
+        this.listArr = res
+      })
+    },
 		nextpage () {
 			if (this.postData.pageNo === Math.ceil(this.total / this.postData.pageSize)) {
 				this.postData.pageNo = Math.ceil(this.total / this.postData.pageSize);
@@ -253,10 +188,28 @@ export default {
 			}
 		}
 .row{
-	display: flex;
+  display: flex;
 }
 .col-1{
-	flex: 1;
+	width: 266px;
+  text-align: center;
+}
+.col-3{
+  width: 100px;
+  text-align: center;
+}
+.col-2{
+  width: 80px;
+  text-align: center;
+  font-size: 15px;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+  -webkit-box-orient: vertical;
+  font-family: fontMedium;
+  margin-right: 180px;
 }
 .contentBox{
 	padding-top: 60px;
@@ -292,6 +245,9 @@ export default {
 			.col-1{
 				text-align: center;
 			}
+      .col-2{
+        text-align: center;
+      }
 		}
 	}
 	.listMain{
@@ -304,6 +260,14 @@ export default {
 		margin-top: 15px;
 		.col-1{
 			text-align: center;
+      font-size: 15px;
+      color: #fff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-align: center;
+      -webkit-box-orient: vertical;
+      font-family: fontMedium;
 		}
 		.greenTxt{
 			color: #2ad8a0;

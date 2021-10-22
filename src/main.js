@@ -14,7 +14,6 @@ import './assets/styles/common.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import ajax from './assets/js/ajaxAl'; // 在ajaxApi中修改打包的环境
-// import ajax from '_@/js/ajax';
 import { storage } from './assets/js/utils';
 import 'codemirror/lib/codemirror.css';
 import echarts from 'echarts';
