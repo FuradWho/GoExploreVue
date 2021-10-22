@@ -16,27 +16,27 @@ const router = new Router({
 		{
 			path: '/index', // 首页
 			name: 'index',
-			component: resolve => require(['#/index/index'], resolve).default
+			component: resolve => require(['../components/index/index'], resolve).default
 		},
 		{
 			path: '/blockChain', // 首页
 			name: 'blockChain',
-			component: resolve => require(['#/blockChain/blockChain'], resolve).default
+			component: resolve => require(['../components/blockChain/blockChain'], resolve).default
 		},
 		{
 			path: '/transaction', // 交易
 			name: 'transaction',
-			component: resolve => require(['#/transaction/transaction'], resolve).default
+			component: resolve => require(['../components/transaction/transaction'], resolve).default
 		},
 		{
 			path: '/medals', // 交易
 			name: 'medals',
-			component: resolve => require(['#/medals/medals'], resolve).default
+			component: resolve => require(['../components/medals/medals'], resolve).default
 		},
 		{
 			path: '/contract', // 合约
 			name: 'contract',
-			component: resolve => require(['#/contract/contract'], resolve).default
+			component: resolve => require(['../components/contract/contract'], resolve).default
 		}
 	],
 	strict: process.env.NODE_ENV !== 'production'
