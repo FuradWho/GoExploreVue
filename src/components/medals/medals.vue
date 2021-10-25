@@ -14,32 +14,17 @@
 				<div class="col-1">时间</div>
 				<div class="col-1">大小</div>
 				<div class="col-1">交易</div>
-				<div class="col-1">系统费</div>
-				<div class="col-1">网络费</div>
 			</div>
 		</div>
-		<div class="listMain row" v-for="(item,index) in listArr" :key="index">
-			<div class="col-1 greenTxt" v-html="item.id"></div>
-			<div class="col-1 fffTxt" v-html="item.time"></div>
-			<div class="col-1 fffTxt" v-html="item.size"></div>
-			<div class="col-1 fffTxt" v-html="item.deal"></div>
-			<div class="col-1 fffTxt" v-html="item.money1"></div>
-			<div class="col-1 fffTxt" v-html="item.money2"></div>
+		<div class="listMain row">
+			<div class="col-1 greenTxt">{{listMap.txs}}</div>
+			<div class="col-1 fffTxt">{{listMap.timestamp}}</div>
+			<div class="col-1 fffTxt">{{listMap.blocks}}</div>
+			<div class="col-1 fffTxt">{{listMap.name}}</div>
 		</div>
 		<div class="footBut">
 			<div class="ye">
-				<!-- <div class="firstPage" :class="{disabled:this.homePage}" @click="firstPage()">首页</div>
-				<div class="backPage" :class="{disabled:this.homePage}" @click="backPage()">上</div>
-				<div v-for="(item,index) in pages" :key="index">
-					<div v-if="item"></div>
-				</div> -->
-				<!-- <div class="firstPage">首页</div> -->
-				<el-pagination
-					background="red"
-					layout="prev, pager, next"
-					:total="1">
-				</el-pagination>
-				<!-- <div class="backPage">尾页</div> -->
+
 			</div>
 		</div>
 	</div>
@@ -50,87 +35,24 @@ export default {
 	name: 'login',
 	data () {
 		return {
-			listArr: [
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				}
-			]
+      listMap: {}
 		};
 	},
 	components: {
 	},
 	created () {
+    this.init()
 	},
 	methods: {
+    init(){
+      this.$ajax({
+        methods: 'get',
+        url:'channel/QueryChannelInfo'
+      }).then(res =>{
+        this.listMap = res
+        console.log(res)
+      })
+    }
 	}
 };
 </script>

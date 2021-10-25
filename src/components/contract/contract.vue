@@ -10,21 +10,17 @@
 		</div>
 		<div class="listBox">
 			<div class="listTitle row">
-				<div class="col-1">索引</div>
-				<div class="col-1">时间</div>
-				<div class="col-1">大小</div>
-				<div class="col-1">交易</div>
-				<div class="col-1">系统费</div>
-				<div class="col-1">网络费</div>
+				<div class="col-1">Chaincode Name</div>
+				<div class="col-1">Label</div>
+				<div class="col-1">PackageID</div>
+				<div class="col-1">Version</div>
 			</div>
 		</div>
 		<div class="listMain row" v-for="(item,index) in listArr" :key="index">
-			<div class="col-1 greenTxt" v-html="item.id"></div>
-			<div class="col-1 fffTxt" v-html="item.time"></div>
-			<div class="col-1 fffTxt" v-html="item.size"></div>
-			<div class="col-1 fffTxt" v-html="item.deal"></div>
-			<div class="col-1 fffTxt" v-html="item.money1"></div>
-			<div class="col-1 fffTxt" v-html="item.money2"></div>
+			<div class="col-1 greenTxt" v-for="(item2,index2) in item.references.mychannel" v-html="item2.name"></div>
+			<div class="col-1 fffTxt" v-html="item.label"></div>
+			<div class="col-1 fffTxt" v-html="item.packageID"></div>
+			<div class="col-1 fffTxt" v-for="(item2,index2) in item.references.mychannel" v-html="item2.version"></div>
 		</div>
 	</div>
 </template>
@@ -34,87 +30,24 @@ export default {
 	name: 'login',
 	data () {
 		return {
-			listArr: [
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				},
-				{
-					id: '1',
-					time: '1',
-					size: '1',
-					deal: '1',
-					money1: '1',
-					money2: '1'
-				}
-			]
+			listArr:[]
 		};
 	},
 	components: {
 	},
 	created () {
+    this.init()
 	},
 	methods: {
+    init(){
+      this.$ajax({
+        methods: "get",
+        url:'cc/QueryInstalledCC',
+      }).then(res =>{
+        console.log(res)
+        this.listArr = res;
+      })
+    }
 	}
 };
 </script>
@@ -125,6 +58,10 @@ export default {
 }
 .col-1{
 	flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: center;
+  -webkit-box-orient: vertical;
 }
 .contentBox{
 	padding-top: 60px;

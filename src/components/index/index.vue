@@ -16,13 +16,14 @@
 	<div class="listBox">
 		<div class="listLeft" id="chartBar" ref="chart"></div>
 		<div class="listRight">
-			<div class="littleBox" v-for="(item,index) in dataArr" :key="index" @click="jumpClick(item.routerLink)">
-				<h1 v-html="item.title" class="htitle"></h1>
-				<h1 v-html="item.txt" class="hText"></h1>
-				<div class="row">
-					<h1 v-html="item.title2" class="hTitle2"></h1>
-					<h1 v-html="item.txt2" class="hTxt2"></h1>
-				</div>
+			<div class="littleBox" v-for="(item,index) in dataArr" :key="index">
+				<h1 class="htitle">{{item.nameId}}</h1>
+				<h1 class="hText">
+          <template v-if="index === 0">{{dataObj.blockNum}}</template>
+          <template v-else-if="index === 1">{{dataObj.chaincodeNum}}</template>
+          <template v-else-if="index === 2">{{dataObj.nodeNum}}</template>
+          <template v-else>{{dataObj.transactionNum}}</template>
+        </h1>
 			</div>
 		</div>
 	</div>
@@ -77,28 +78,20 @@ export default {
 	data () {
 		return {
 			dataArr: [
-				{
-					title: '区块总高度',
-					txt: '429,686',
-					routerLink: 'blockChain'
-				},
-				{
-					title: '节点',
-					txt: '5'
-				},
-				{
-					title: '链码',
-					txt: '9,934',
-					title2: '',
-					txt2: ''
-				},
-				{
-					title: '交易总量',
-					txt: '56,293',
-					title2: '',
-					txt2: ''
-				}
-			],
+        {
+          nameId:'blockNum'
+        },
+        {
+          nameId:'chaincodeNum'
+        },
+        {
+          nameId:'nodeNum'
+        },
+        {
+          nameId:'transactionNum'
+        }
+      ],
+      dataObj: {},
 			tabList: [],
       tabList2:[]
 		};
@@ -107,6 +100,7 @@ export default {
 	},
 	created () {
 		this.init();
+    this.height();
 	// this.findSystem();
 	},
 	mounted () {
@@ -229,6 +223,22 @@ export default {
         console.log(this.tabList2)
       });
 		},
+    height(){
+      this.$ajax({
+        method:'get',
+        url:'blocks/QueryBlockMainInfo'
+      }).then(res =>{
+        this.dataObj = res;
+        let arr = [];
+        for (let key in res) {
+          arr.push(res[key]);
+        }
+        this.dataArr.forEach((item, index) => {
+          item.count = arr[index];
+        });
+        console.log(res)
+      })
+    },
 		gotoRouter (routerLink) {
 			this.$router.push({name: routerLink});
 		}

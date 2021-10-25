@@ -8,27 +8,73 @@
 		<div class="htitle">
 			<span>区块</span>
 			<div class="searchBox">
-				<input type="text" class="searchInp" placeholder="查询区块 / 哈希 / 地址">
-				<div class="searchIco"></div>
+				<input type="text" class="searchInp" v-model="inpVal" placeholder="查询区块 / 哈希 / 地址">
+				<div class="searchIco" @click="search()"></div>
 			</div>
 		</div>
-		<div class="listBox">
-			<div class="listTitle row">
-				<div class="col-1">索引</div>
-				<div class="col-2">blockHash</div>
-				<div class="col-2">preHash</div>
+    <!--  qkliebian  -->
+    <template v-if="blockVisible">
+      <div class="listBox">
+        <div class="listTitle row">
+          <div class="col-1" style="color: #fff">索引</div>
+          <div class="col-4">blockHash</div>
+          <div class="col-4">preHash</div>
+          <div class="col-3">交易</div>
+          <div class="col-1">时间</div>
+        </div>
+      </div>
+      <div class="listMain row" v-for="(item,index) in listArr" :key="index">
+        <div class="col-1 greenTxt" v-html="item.number"></div>
+        <div class="col-2 fffTxt" v-html="item.blockHash"></div>
+        <div class="col-2 fffTxt" v-html="item.previousHash"></div>
+        <div class="col-3 fffTxt" v-html="item.txNum"></div>
+        <div class="col-1 fffTxt" v-html="item.createTime"></div>
+      </div>
+      <div class="center">
+        <el-pagination
+            layout="prev, pager, next"
+            :page-size="pageSize"
+            :page-count="pageNum"
+            @current-change="changeCurrentPage"
+            :total="total">
+        </el-pagination>
+      </div>
+    </template>
+    <!--   info -->
+    <template v-if="blockInfoHash">
+      <div class="listTitle row" style="width: 1300px;margin: 0 auto">
+        <div class="col-1" style="color: #fff;margin-left: 43px">索引</div>
+        <div class="col-4">blockHash</div>
+        <div class="col-4">preHash</div>
         <div class="col-3">交易</div>
         <div class="col-1">时间</div>
-			</div>
-		</div>
-		<div class="listMain row" v-for="(item,index) in listArr" :key="index">
-			<div class="col-1 greenTxt" v-html="item.number"></div>
-			<div class="col-2 fffTxt" v-html="item.blockHash"></div>
-			<div class="col-2 fffTxt" v-html="item.previousHash"></div>
-      <div class="col-3 fffTxt" v-html="item.txNum"></div>
-      <div class="col-1 fffTxt" v-html="item.createTime"></div>
-		</div>
+      </div>
+      <div class="listMain row" v-for="(item,index) in listArr" :key="index">
+        <div class="col-1 greenTxt">{{blockHash.number}}</div>
+        <div class="col-2 fffTxt">{{blockHash.blockHash}}</div>
+        <div class="col-2 fffTxt">{{blockHash.previousHash}}</div>
+        <div class="col-3 fffTxt">{{blockHash.txNum}}</div>
+        <div class="col-1 fffTxt">{{blockHash.createTime}}</div>
+      </div>
+    </template>
+    <template v-if="blockInfoVisible">
+      <div class="listTitle row" style="width: 1300px;margin: 0 auto">
+        <div class="col-1" style="color: #fff;margin-left: 43px">索引</div>
+        <div class="col-4">blockHash</div>
+        <div class="col-4">preHash</div>
+        <div class="col-3">交易</div>
+        <div class="col-1">时间</div>
+      </div>
+      <div class="listMain row" v-for="(item,index) in listArr" :key="index">
+        <div class="col-1 greenTxt">{{blockMap.number}}</div>
+        <div class="col-2 fffTxt">{{blockMap.blockHash}}</div>
+        <div class="col-2 fffTxt">{{blockMap.previousHash}}</div>
+        <div class="col-3 fffTxt">{{blockMap.txNum}}</div>
+        <div class="col-1 fffTxt">{{blockMap.createTime}}</div>
+      </div>
+    </template>
 		<div class="footBut">
+      <!-- <div class="backPage">尾页</div> -->
 			<div class="ye">
 				<div class="firstPage butSty" :class="{disabled:this.homePage}" @click="firstPage()">首页</div>
 				<div class="backPage butSty" :class="{disabled:this.homePage}" @click="backPage()">上</div>
@@ -37,12 +83,7 @@
 				</div>
 				<div class="nextPage butSty">下</div>
 				<div class="firstPage butSty" :class="{disabled:this.homePage}" @click="endPage()">尾页</div>
-				<!-- <el-pagination
-					:style="selfstyle"
-					layout="prev, pager, next"
-					:total="1000">
-					</el-pagination> -->
-				<!-- <div class="backPage">尾页</div> -->
+
 			</div>
 		</div>
 	</div>
@@ -61,6 +102,16 @@ export default {
 			homePage: true, // 是否是首页
 			endPage: false, // 是否为尾页
 			listArr: [],
+      listArrView: [],
+      inpVal:'',
+      blockMap: {},
+      blockHash:{},
+      blockVisible: false,
+      blockInfoVisible: false,
+      blockInfoHash:false,
+      total: 0,
+      pageSize: 10, // daxiao
+      pageNum: 1, // yema
 			pages: [
 				{
 					txt: '1'
@@ -74,85 +125,68 @@ export default {
     this.init();
 	},
 	methods: {
+    changeCurrentPage (val) {
+      this.pageNum = val;
+      this.listArr = this.listArrView.slice((this.pageNum - 1) * this.pageSize,this.pageNum * this.pageSize);
+    },
     init(){
       this.$ajax({
         method: 'get',
         url: 'blocks/QueryAllBlocksInfo',
       }).then(res =>{
-        console.log(res)
-        this.listArr = res
-      })
+        this.blockVisible = true;
+        this.blockInfoVisible = false;
+        this.blockInfoHash = false;
+        this.listArrView = res.sort((b, a) => {b.number - a.number})
+        this.total = res.length;
+        this.pageNum = 1;
+        this.changeCurrentPage(this.pageNum);
+      });
     },
-		nextpage () {
-			if (this.postData.pageNo === Math.ceil(this.total / this.postData.pageSize)) {
-				this.postData.pageNo = Math.ceil(this.total / this.postData.pageSize);
-			} else if (Math.ceil(this.total / this.postData.pageSize) === 0) {
-				this.postData.pageNo = 1;
-			} else {
-				this.postData.pageNo++;
-			}
-			axios({
-				method: this.method,
-				url: this.url,
-				data: JSON.stringify(this.postData)
-			}).then((proList) => {
-				this.proList = proList.data.resultList;
-			}).catch((error) => {
-				console.log(error);
-			});
-		},
-		// 上一页
-		backpage () {
-			if (this.postData.pageNo === 1) {
-				this.postData.pageNo = 1;
-			} else {
-				this.postData.pageNo--;
-			}
-			axios({
-				method: this.method,
-				url: this.url,
-				data: JSON.stringify(this.postData)
-			}).then((proList) => {
-				this.proList = proList.data.resultList;
-			}).catch((error) => {
-				console.log(error);
-			});
-		}
-		// 首页
-		// firstpage () {
-		// 	this.postData.pageNo = 1,
-		// 	axios({
-		// 		method: this.method,
-		// 		url: this.url,
-		// 		data: JSON.stringify(this.postData)
-		// 	}).then((proList) => {
-		// 		this.proList = proList.data.resultList;
-		// 	}).catch((error) => {
-		// 		console.log(error);
-		// 	});
-		// },
-		// // 尾页
-		// lastpage () {
-		// 	if (Math.ceil(this.total / this.postData.pageSize) === 0) {
-		// 		this.postData.pageNo = 1;
-		// 	} else {
-		// 		this.postData.pageNo = Math.ceil(this.total / this.postData.pageSize),
-		// 		axios({
-		// 			method: this.method,
-		// 			url: this.url,
-		// 			data: JSON.stringify(this.postData)
-		// 		}).then((proList) => {
-		// 			this.proList = proList.data.resultList;
-		// 		}).catch((error) => {
-		// 			console.log(error);
-		// 		});
-		// 	}
-		// }
+    search(){
+      let inpVal = this.inpVal;
+      if (!isNaN(inpVal)){
+       this.$ajax({
+         method:'get',
+         url:'blocks/QueryBlockByBlockNum',
+         params: {
+           blockNum: inpVal
+         }
+       }).then( res =>{
+         this.blockVisible = false;
+         this.blockInfoHash = false
+         this.blockInfoVisible = true;
+         this.blockMap= res
+         console.log(res)
+       })
+     }else{
+        console.log(11)
+        console.log(inpVal)
+      this.$ajax({
+        method:'get',
+        url:'blocks/QueryBlockInfoByHash',
+        params: {
+          blockHash: inpVal
+        }
+      }).then( res =>{
+        this.blockVisible = false;
+        this.blockInfoVisible = false;
+        this.blockInfoHash = true;
+        this.blockHash= res
+        console.log(res)
+      })
+     }
+    },
 	}
 };
 </script>
 
 <style lang="scss" scoped>
+.col-4{
+  width: 100px;
+  margin-right: 135px;
+  margin-left: 42px;
+}
 .searchBox{
 			width: 750px;
 			height: 66px;
@@ -191,12 +225,11 @@ export default {
   display: flex;
 }
 .col-1{
-	width: 266px;
+  width: 193px;
   text-align: center;
 }
 .col-3{
   width: 100px;
-  text-align: center;
 }
 .col-2{
   width: 80px;
@@ -243,6 +276,7 @@ export default {
 			width: 1200px;
 			color: #8698a0;
 			.col-1{
+        color: #fff;
 				text-align: center;
 			}
       .col-2{
@@ -270,6 +304,8 @@ export default {
       font-family: fontMedium;
 		}
 		.greenTxt{
+      width: 193px;
+      margin-right: 45px;
 			color: #2ad8a0;
 		}
 		.fffTxt{

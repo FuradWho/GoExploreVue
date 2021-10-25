@@ -8,26 +8,46 @@
     <div class="htitle">
       <span>区块</span>
       <div class="searchBox">
-        <input type="text" class="searchInp" placeholder="查询区块 / 哈希 / 地址">
-        <div class="searchIco"></div>
+        <input type="text" class="searchInp" v-model="inpTxt" placeholder="查询区块 / 哈希 / 地址">
+        <div class="searchIco" @click="search()" ></div>
       </div>
     </div>
-    <div class="listBox">
-      <div class="listTitle row">
-        <div class="col-1">索引</div>
-        <div class="col-2">blockHash</div>
-        <div class="col-2">preHash</div>
-        <div class="col-3">交易</div>
-        <div class="col-1">时间</div>
+    <template v-if="blockVisible">
+      <div class="listBox">
+        <div class="listTitle row">
+          <div class="col-1">blockNum</div>
+          <div class="col-2">txId</div>
+          <div class="col-2">chaincodeId</div>
+          <div class="col-3">channelId</div>
+          <div class="col-1">timestamp</div>
+        </div>
+        <div class="listMain row" v-for="(item,index) in tabList2" :key="index">
+          <div class="col-1 greenTxt" v-html="item.blockNum"></div>
+          <div class="col-2 fffTxt" v-html="item.txId"></div>
+          <div class="col-2 fffTxt" v-html="item.chaincodeId"></div>
+          <div class="col-3 fffTxt" v-html="item.channelId"></div>
+          <div class="col-1 fffTxt" v-html="item.timestamp"></div>
+        </div>
       </div>
-    </div>
-    <div class="listMain row" v-for="(item,index) in tabList2" :key="index">
-      <div class="col-1 greenTxt" v-html="item.number"></div>
-      <div class="col-2 fffTxt" v-html="item.blockHash"></div>
-      <div class="col-2 fffTxt" v-html="item.previousHash"></div>
-      <div class="col-3 fffTxt" v-html="item.txNum"></div>
-      <div class="col-1 fffTxt" v-html="item.createTime"></div>
-    </div>
+    </template>
+    <template v-if="blockInfoVisible">
+      <div class="listBox">
+        <div class="listTitle row">
+          <div class="col-1">blockNum</div>
+          <div class="col-2">txId</div>
+          <div class="col-2">chaincodeId</div>
+          <div class="col-3">channelId</div>
+          <div class="col-1">timestamp</div>
+        </div>
+        <div class="listMain row" v-for="(item,index) in tabList2" :key="index">
+          <div class="col-1 greenTxt">{{item.blockNum}}</div>
+          <div class="col-2 fffTxt" v-html="item.txId"></div>
+          <div class="col-2 fffTxt" v-html="item.chaincodeId"></div>
+          <div class="col-3 fffTxt" v-html="item.channelId"></div>
+          <div class="col-1 fffTxt" v-html="item.timestamp"></div>
+        </div>
+      </div>
+    </template>
     <div class="footBut">
       <div class="ye">
         <div class="firstPage butSty" :class="{disabled:this.homePage}" @click="firstPage()">首页</div>
@@ -54,13 +74,14 @@ export default {
   name: 'login',
   data () {
     return {
-      // selfstyle: {
-      // 	color: 'red',
-      // 	background: '#2a3235'
-      // },
+      blockMap: {},
+      blockHash:{},
+      blockVisible: false,
+      blockInfoVisible: false,
       homePage: true, // 是否是首页
       endPage: false, // 是否为尾页
       listArr: [],
+      inpTxt:'',
       tabList2:[],
       pages: [
         {
@@ -75,13 +96,30 @@ export default {
     this.init();
   },
   methods: {
+    search(){
+      let inpVal= this.inpTxt;
+      this.$ajax({
+        method:'get',
+        url:'txs/QueryTxByTxId',
+        params:{
+          txId:inpVal
+        }
+      }).then(res =>{
+        console.log(res);
+        this.blockVisible = false;
+        this.blockInfoVisible = true;
+        this.tabList2 = res;
+      })
+    },
     init(){
       this.$ajax({
         method: 'get',
         url: 'blocks/QueryAllBlocksInfo',
       }).then(res =>{
         console.log(res)
-        this.listArr = res
+        this.listArr = res;
+        this.blockVisible = true;
+        this.blockInfoVisible = false;
         for (let i=0; i <res.length;i++){
           let arr2 = res[i].transactionList;
           for (let i=0; i <arr2.length; i ++){
@@ -93,71 +131,6 @@ export default {
         }
       })
     },
-    nextpage () {
-      if (this.postData.pageNo === Math.ceil(this.total / this.postData.pageSize)) {
-        this.postData.pageNo = Math.ceil(this.total / this.postData.pageSize);
-      } else if (Math.ceil(this.total / this.postData.pageSize) === 0) {
-        this.postData.pageNo = 1;
-      } else {
-        this.postData.pageNo++;
-      }
-      axios({
-        method: this.method,
-        url: this.url,
-        data: JSON.stringify(this.postData)
-      }).then((proList) => {
-        this.proList = proList.data.resultList;
-      }).catch((error) => {
-        console.log(error);
-      });
-    },
-    // 上一页
-    backpage () {
-      if (this.postData.pageNo === 1) {
-        this.postData.pageNo = 1;
-      } else {
-        this.postData.pageNo--;
-      }
-      axios({
-        method: this.method,
-        url: this.url,
-        data: JSON.stringify(this.postData)
-      }).then((proList) => {
-        this.proList = proList.data.resultList;
-      }).catch((error) => {
-        console.log(error);
-      });
-    }
-    // 首页
-    // firstpage () {
-    // 	this.postData.pageNo = 1,
-    // 	axios({
-    // 		method: this.method,
-    // 		url: this.url,
-    // 		data: JSON.stringify(this.postData)
-    // 	}).then((proList) => {
-    // 		this.proList = proList.data.resultList;
-    // 	}).catch((error) => {
-    // 		console.log(error);
-    // 	});
-    // },
-    // // 尾页
-    // lastpage () {
-    // 	if (Math.ceil(this.total / this.postData.pageSize) === 0) {
-    // 		this.postData.pageNo = 1;
-    // 	} else {
-    // 		this.postData.pageNo = Math.ceil(this.total / this.postData.pageSize),
-    // 		axios({
-    // 			method: this.method,
-    // 			url: this.url,
-    // 			data: JSON.stringify(this.postData)
-    // 		}).then((proList) => {
-    // 			this.proList = proList.data.resultList;
-    // 		}).catch((error) => {
-    // 			console.log(error);
-    // 		});
-    // 	}
-    // }
   }
 };
 </script>
