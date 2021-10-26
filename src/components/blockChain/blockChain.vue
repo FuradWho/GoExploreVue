@@ -30,7 +30,7 @@
         <div class="col-3 fffTxt" v-html="item.txNum"></div>
         <div class="col-1 fffTxt" v-html="item.createTime"></div>
       </div>
-      <div class="center">
+      <div class="center" style="margin-top: 20px">
         <el-pagination
             layout="prev, pager, next"
             :page-size="pageSize"
@@ -49,7 +49,7 @@
         <div class="col-3">交易</div>
         <div class="col-1">时间</div>
       </div>
-      <div class="listMain row" v-for="(item,index) in listArr" :key="index">
+      <div class="listMain row">
         <div class="col-1 greenTxt">{{blockHash.number}}</div>
         <div class="col-2 fffTxt">{{blockHash.blockHash}}</div>
         <div class="col-2 fffTxt">{{blockHash.previousHash}}</div>
@@ -65,7 +65,7 @@
         <div class="col-3">交易</div>
         <div class="col-1">时间</div>
       </div>
-      <div class="listMain row" v-for="(item,index) in listArr" :key="index">
+      <div class="listMain row">
         <div class="col-1 greenTxt">{{blockMap.number}}</div>
         <div class="col-2 fffTxt">{{blockMap.blockHash}}</div>
         <div class="col-2 fffTxt">{{blockMap.previousHash}}</div>
@@ -73,19 +73,6 @@
         <div class="col-1 fffTxt">{{blockMap.createTime}}</div>
       </div>
     </template>
-		<div class="footBut">
-      <!-- <div class="backPage">尾页</div> -->
-			<div class="ye">
-				<div class="firstPage butSty" :class="{disabled:this.homePage}" @click="firstPage()">首页</div>
-				<div class="backPage butSty" :class="{disabled:this.homePage}" @click="backPage()">上</div>
-				<div class="numPage butSty" v-for="(item,index) in pages" :key="index">
-					<div v-html="item.txt"></div>
-				</div>
-				<div class="nextPage butSty">下</div>
-				<div class="firstPage butSty" :class="{disabled:this.homePage}" @click="endPage()">尾页</div>
-
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -182,6 +169,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body{
+  background:  #232b2e;
+}
 .col-4{
   width: 100px;
   margin-right: 135px;

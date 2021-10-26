@@ -39,30 +39,17 @@
           <div class="col-3">channelId</div>
           <div class="col-1">timestamp</div>
         </div>
-        <div class="listMain row" v-for="(item,index) in tabList2" :key="index">
+        <div class="listMain row" v-for="(item,index) in listArr" :key="index">
           <div class="col-1 greenTxt">{{item.blockNum}}</div>
-          <div class="col-2 fffTxt" v-html="item.txId"></div>
-          <div class="col-2 fffTxt" v-html="item.chaincodeId"></div>
-          <div class="col-3 fffTxt" v-html="item.channelId"></div>
-          <div class="col-1 fffTxt" v-html="item.timestamp"></div>
+          <div class="col-2 fffTxt">{{item.txId}}</div>
+          <div class="col-2 fffTxt">{{item.chaincodeId}}</div>
+          <div class="col-3 fffTxt">{{item.channelId}}</div>
+          <div class="col-1 fffTxt" >{{item.timestamp}}</div>
         </div>
       </div>
     </template>
     <div class="footBut">
       <div class="ye">
-        <div class="firstPage butSty" :class="{disabled:this.homePage}" @click="firstPage()">首页</div>
-        <div class="backPage butSty" :class="{disabled:this.homePage}" @click="backPage()">上</div>
-        <div class="numPage butSty" v-for="(item,index) in pages" :key="index">
-          <div v-html="item.txt"></div>
-        </div>
-        <div class="nextPage butSty">下</div>
-        <div class="firstPage butSty" :class="{disabled:this.homePage}" @click="endPage()">尾页</div>
-        <!-- <el-pagination
-          :style="selfstyle"
-          layout="prev, pager, next"
-          :total="1000">
-          </el-pagination> -->
-        <!-- <div class="backPage">尾页</div> -->
       </div>
     </div>
   </div>
@@ -70,6 +57,7 @@
 
 <script>
 import axios from 'axios/index';
+import blockChain from "../blockChain/blockChain";
 export default {
   name: 'login',
   data () {
@@ -105,10 +93,9 @@ export default {
           txId:inpVal
         }
       }).then(res =>{
-        console.log(res);
         this.blockVisible = false;
         this.blockInfoVisible = true;
-        this.tabList2 = res;
+        this.listArr = Object.values(res).reduce((a,b) => a.concat(b));
       })
     },
     init(){

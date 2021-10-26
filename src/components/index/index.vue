@@ -8,10 +8,6 @@
 	<div class="titleFont">
 		<h1 class="hOne">欢迎来到知链</h1>
 		<h1 class="hTwo">快速、正确、便利的 知链 区块链信息查询平台</h1>
-		<div class="searchBox">
-			<input type="text" class="searchInp" placeholder="查询区块 / 哈希 / 地址">
-			<div class="searchIco"></div>
-		</div>
 	</div>
 	<div class="listBox">
 		<div class="listLeft" id="chartBar" ref="chart"></div>
@@ -31,7 +27,7 @@
 		<div class="tabTitle row">
 			<div class="col-1 txtAfter">最新块</div>
 			<div class="col-1  leftTxt">最新交易</div>
-			<div class="col-1"><span class="greenBk">查看全部</span></div>
+			<div class="col-1"></div>
 		</div>
 		<div class="tabBox">
 			<div class="tabLeft">
@@ -45,8 +41,8 @@
 				<div class="listMain row" v-for="(item,index) in tabList" :key="index">
 					<h1 v-html="item.number" class="mainBoxA greenTxt"></h1>
 					<h1 v-html="item.txNum" class="mainBoxA txtA"></h1>
-					<h1 v-html="item.previousHash" class="mainBoxA txtA"></h1>
-					<h1 v-html="item.blockHash" class="mainBoxA txtA "></h1>
+					<h1 v-html="item.previousHash" class=" txtC"></h1>
+					<h1 v-html="item.blockHash" class=" txtC "></h1>
 					<h1 v-html="item.createTime" class="mainBoxA txtA"></h1>
 				</div>
 			</div>
@@ -58,7 +54,7 @@
 					<div class="col-1">时间</div>
 				</div>
 				<div class="listMain row" v-for="(item,index) in tabList2" :key="index">
-					<h1 v-html="item.txId" class="col-1 greenTxt"></h1>
+					<h1 v-html="item.txId" class="txtD greenTxt"></h1>
 					<h1 v-html="item.chaincodeId" class="col-1 txtA "></h1>
 					<h1 v-html="item.channelId" class="col-1 txtA "></h1>
 					<h1 v-html="item.timestamp" class="col-1 txtA"></h1>
@@ -99,14 +95,15 @@ export default {
 	components: {
 	},
 	created () {
-		this.init();
+		// this.init();
+    this.getData();
     this.height();
 	// this.findSystem();
 	},
 	mounted () {
 	},
 	methods: {
-		init () {
+		init (xdata, ydata) {
 			this.$nextTick(() => {
 				let myChart = echarts.init(document.getElementById('chartBar'));
 				// 绘制图表
@@ -127,7 +124,7 @@ export default {
 						}
 					},
 					legend: {
-						data: ['Email', 'Direct'],
+						data: "email",
 						textStyle: {
 							color: 'white'
 						}
@@ -147,7 +144,7 @@ export default {
 						{
 							type: 'category',
 							boundaryGap: false,
-							data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+							data: xdata,
 							axisLine: {
 								lineStyle: {
 									color: '#2ad8a0',
@@ -159,6 +156,7 @@ export default {
 					yAxis: [
 						{
 							type: 'value',
+              max:15,
 							axisLine: {
 								lineStyle: {
 									color: 'white',
@@ -179,20 +177,7 @@ export default {
 							emphasis: {
 								focus: 'series'
 							},
-							data: [120, 132, 101, 134, 90, 230, 210]
-						},
-						{
-							name: 'Direct',
-							type: 'line',
-							stack: 'Total',
-							areaStyle: {},
-							lineStyle: {
-								color: '#dd705b'
-							},
-							emphasis: {
-								focus: 'series'
-							},
-							data: [320, 332, 301, 334, 390, 330, 320]
+							data: ydata
 						}
 					],
 					itemStyle: {
@@ -205,14 +190,20 @@ export default {
 					}
 				});
 			});
-			this.$ajax({
-				method: 'get',
-				url: 'blocks/QueryLastesBlocksInfo',
-			}).then(res =>{
+		},
+    getData () {
+      this.$ajax({
+        method: 'get',
+        url: 'blocks/QueryLastesBlocksInfo',
+      }).then(res =>{
         console.log(res)
         this.tabList = res;
+        let xdata = [];
+        let ydata = [];
         for (let i=0; i <res.length;i++){
           let arr2 = res[i].transactionList;
+          xdata.push(res[i].createTime);
+          ydata.push(res[i].txNum);
           for (let i=0; i <arr2.length; i ++){
             let arr3 = arr2[i].transactionActionList;
             for (let i=0; i <arr3.length; i ++){
@@ -220,9 +211,13 @@ export default {
             }
           }
         }
-        console.log(this.tabList2)
+        // let dataVale = series.map( (item)=>{
+        //   return item.data
+        // } )
+        // console.log(dataVale);
+        this.init(xdata, ydata);
       });
-		},
+    },
     height(){
       this.$ajax({
         method:'get',
@@ -250,6 +245,30 @@ export default {
 input{
 outline: green;
 }
+.txtC{
+  width: 50px;
+  font-size: 15px;
+  color: #fff;
+  margin-right: 24px;
+  margin-left: 42px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  font-family: fontMedium;
+}
+.txtD{
+  width: 50px;
+  font-size: 15px;
+  color: #fff;
+  margin-right: 34px;
+  margin-left: 65px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  font-family: fontMedium;
+}
 .row{
 	display: flex;
 }
@@ -257,7 +276,8 @@ outline: green;
 	flex: 1;
 }
 .col-2{
-  flex: 2;
+  width: 80px;
+
 }
 .index{
 	padding-top: 60px;
@@ -265,7 +285,7 @@ outline: green;
 	background: #232b2e;
 	.titleFont{
 		width: 1300px;
-		height:250px;
+		height:136px;
 		margin: 0 auto;
 		.hOne{
 			font-size: 38px;
