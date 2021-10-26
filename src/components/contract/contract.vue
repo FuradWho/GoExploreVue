@@ -5,9 +5,9 @@
  -->
 <template>
 	<div class="contentBox">
-		<div class="htitle">
-			<span>链码</span>
-		</div>
+    <div class="htitle">
+      <span>交易</span>
+    </div>
 		<div class="listBox">
 			<div class="listTitle row">
 				<div class="col-1">Chaincode Name</div>
@@ -19,7 +19,7 @@
 		<div class="listMain row" v-for="(item,index) in listArr" :key="index">
 			<div class="col-1 greenTxt" v-for="(item2,index2) in item.references.mychannel" v-html="item2.name"></div>
 			<div class="col-1 fffTxt" v-html="item.label"></div>
-			<div class="col-1 fffTxt" v-html="item.packageID"></div>
+			<div class="col-1 fffTxt" :title="item.packageID" v-html="item.packageID"></div>
 			<div class="col-1 fffTxt" v-for="(item2,index2) in item.references.mychannel" v-html="item2.version"></div>
 		</div>
 	</div>
@@ -69,20 +69,20 @@ export default {
 	background: #232b2e;
 	.htitle{
 		width: 1200px;
-		height: 40px;
+		height: 90px;
 		margin: 0 auto;
 		color: #fff;
 		font-family: fontBold;
-		font-size: 22px;
+		font-size: 35px;
 		position: relative;
 		margin-bottom: 30px;
 		&::after{
 			display: block;
 			position: absolute;
 			content: '';
-			width: 50px;
+			width: 75px;
 			height: 2px;
-			bottom: 0;
+			bottom: 35px;
 			background: #2ad8a0;
 		}
 	}

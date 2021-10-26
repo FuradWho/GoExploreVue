@@ -6,7 +6,7 @@
 <template>
   <div class="contentBox">
     <div class="htitle">
-      <span>区块</span>
+      <span>交易</span>
       <div class="searchBox">
         <input type="text" class="searchInp" v-model="inpTxt" placeholder="查询区块 / 哈希 / 地址">
         <div class="searchIco" @click="search()" ></div>
@@ -23,7 +23,7 @@
         </div>
         <div class="listMain row" v-for="(item,index) in tabList2" :key="index">
           <div class="col-1 greenTxt" v-html="item.blockNum"></div>
-          <div class="col-2 fffTxt" v-html="item.txId"></div>
+          <div class="col-2 fffTxt" :title="item.txId" v-html="item.txId"></div>
           <div class="col-2 fffTxt" v-html="item.chaincodeId"></div>
           <div class="col-3 fffTxt" v-html="item.channelId"></div>
           <div class="col-1 fffTxt" v-html="item.timestamp"></div>
@@ -41,7 +41,7 @@
         </div>
         <div class="listMain row" v-for="(item,index) in listArr" :key="index">
           <div class="col-1 greenTxt">{{item.blockNum}}</div>
-          <div class="col-2 fffTxt">{{item.txId}}</div>
+          <div class="col-2 fffTxt" :title="item.txId">{{item.txId}}</div>
           <div class="col-2 fffTxt">{{item.chaincodeId}}</div>
           <div class="col-3 fffTxt">{{item.channelId}}</div>
           <div class="col-1 fffTxt" >{{item.timestamp}}</div>
@@ -86,17 +86,21 @@ export default {
   methods: {
     search(){
       let inpVal= this.inpTxt;
-      this.$ajax({
-        method:'get',
-        url:'txs/QueryTxByTxId',
-        params:{
-          txId:inpVal
-        }
-      }).then(res =>{
-        this.blockVisible = false;
-        this.blockInfoVisible = true;
-        this.listArr = Object.values(res).reduce((a,b) => a.concat(b));
-      })
+      if (inpVal ===""){
+        alert('不得为空')
+      }else {
+        this.$ajax({
+          method:'get',
+          url:'txs/QueryTxByTxId',
+          params:{
+            txId:inpVal
+          }
+        }).then(res =>{
+          this.blockVisible = false;
+          this.blockInfoVisible = true;
+          this.listArr = Object.values(res).reduce((a,b) => a.concat(b));
+        })
+      }
     },
     init(){
       this.$ajax({

@@ -41,9 +41,9 @@
 				<div class="listMain row" v-for="(item,index) in tabList" :key="index">
 					<h1 v-html="item.number" class="mainBoxA greenTxt"></h1>
 					<h1 v-html="item.txNum" class="mainBoxA txtA"></h1>
-					<h1 v-html="item.previousHash" class=" txtC"></h1>
-					<h1 v-html="item.blockHash" class=" txtC "></h1>
-					<h1 v-html="item.createTime" class="mainBoxA txtA"></h1>
+					<h1 v-html="item.previousHash" :title="item.previousHash" class=" txtC"></h1>
+					<h1 v-html="item.blockHash" :title="item.blockHash" class=" txtC "></h1>
+					<h1 v-html="item.createTime" :title="item.createTime" class="mainBoxA txtA"></h1>
 				</div>
 			</div>
 			<div class="tabLeft">
@@ -54,7 +54,7 @@
 					<div class="col-1">时间</div>
 				</div>
 				<div class="listMain row" v-for="(item,index) in tabList2" :key="index">
-					<h1 v-html="item.txId" class="txtD greenTxt"></h1>
+					<h1 v-html="item.txId" :title="item.txId" class="txtD greenTxt"></h1>
 					<h1 v-html="item.chaincodeId" class="col-1 txtA "></h1>
 					<h1 v-html="item.channelId" class="col-1 txtA "></h1>
 					<h1 v-html="item.timestamp" class="col-1 txtA"></h1>
@@ -498,6 +498,19 @@ outline: green;
 				border-radius: 8px;
 				line-height: 50px;
 				background: #676c77;
+        h1{
+          &:nth-child(3){
+            position: relative;
+            &:after{
+              position: absolute;
+              display: block;
+              content: '';
+              top: -50px;
+              width: 300px;
+              background: red;
+            }
+          }
+        }
         .mainBoxA{
           width: 147px;
           text-align: center;
@@ -525,10 +538,6 @@ outline: green;
           overflow: hidden;
           -webkit-box-orient: vertical;
 					font-family: fontMedium;
-          &:hover{
-            overflow: visible;
-            white-space: inherit;
-          }
 				}
 			}
 		}

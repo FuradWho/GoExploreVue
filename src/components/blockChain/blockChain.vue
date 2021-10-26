@@ -25,8 +25,8 @@
       </div>
       <div class="listMain row" v-for="(item,index) in listArr" :key="index">
         <div class="col-1 greenTxt" v-html="item.number"></div>
-        <div class="col-2 fffTxt" v-html="item.blockHash"></div>
-        <div class="col-2 fffTxt" v-html="item.previousHash"></div>
+        <div class="col-2 fffTxt" :title="item.blockHash" v-html="item.blockHash"></div>
+        <div class="col-2 fffTxt" :title="item.previousHash" v-html="item.previousHash"></div>
         <div class="col-3 fffTxt" v-html="item.txNum"></div>
         <div class="col-1 fffTxt" v-html="item.createTime"></div>
       </div>
@@ -51,8 +51,8 @@
       </div>
       <div class="listMain row">
         <div class="col-1 greenTxt">{{blockHash.number}}</div>
-        <div class="col-2 fffTxt">{{blockHash.blockHash}}</div>
-        <div class="col-2 fffTxt">{{blockHash.previousHash}}</div>
+        <div class="col-2 fffTxt" :title="blockHash.blockHash">{{blockHash.blockHash}}</div>
+        <div class="col-2 fffTxt" :title="blockHash.previousHash">{{blockHash.previousHash}}</div>
         <div class="col-3 fffTxt">{{blockHash.txNum}}</div>
         <div class="col-1 fffTxt">{{blockHash.createTime}}</div>
       </div>
@@ -67,8 +67,8 @@
       </div>
       <div class="listMain row">
         <div class="col-1 greenTxt">{{blockMap.number}}</div>
-        <div class="col-2 fffTxt">{{blockMap.blockHash}}</div>
-        <div class="col-2 fffTxt">{{blockMap.previousHash}}</div>
+        <div class="col-2 fffTxt" :title="blockMap.blockHash">{{blockMap.blockHash}}</div>
+        <div class="col-2 fffTxt" :title="blockMap.previousHash">{{blockMap.previousHash}}</div>
         <div class="col-3 fffTxt">{{blockMap.txNum}}</div>
         <div class="col-1 fffTxt">{{blockMap.createTime}}</div>
       </div>
@@ -132,36 +132,42 @@ export default {
     },
     search(){
       let inpVal = this.inpVal;
-      if (!isNaN(inpVal)){
-       this.$ajax({
-         method:'get',
-         url:'blocks/QueryBlockByBlockNum',
-         params: {
-           blockNum: inpVal
-         }
-       }).then( res =>{
-         this.blockVisible = false;
-         this.blockInfoHash = false
-         this.blockInfoVisible = true;
-         this.blockMap= res
-         console.log(res)
-       })
-     }else{
-        console.log(11)
-        console.log(inpVal)
-      this.$ajax({
-        method:'get',
-        url:'blocks/QueryBlockInfoByHash',
-        params: {
-          blockHash: inpVal
-        }
-      }).then( res =>{
-        this.blockVisible = false;
-        this.blockInfoVisible = false;
-        this.blockInfoHash = true;
-        this.blockHash= res
-        console.log(res)
-      })
+      if(inpVal === ""){
+        alert("不得为空")
+      }
+      else {
+        if (!isNaN(inpVal)){
+          this.$ajax({
+            method:'get',
+            url:'blocks/QueryBlockByBlockNum',
+            params: {
+              blockNum: inpVal
+            }
+          }).then( res =>{
+            this.blockVisible = false;
+            this.blockInfoHash = false
+            this.blockInfoVisible = true;
+            this.blockMap= res
+            console.log(res)
+          })
+        }else{
+          console.log(11)
+          console.log(inpVal)
+          this.$ajax({
+            method:'get',
+            url:'blocks/QueryBlockInfoByHash',
+            params: {
+              blockHash: inpVal
+            }
+          }).then( res =>{
+            this.blockVisible = false;
+            this.blockInfoVisible = false;
+            this.blockInfoHash = true;
+            this.blockHash= res
+            console.log(res)
+          })
+      }
+        return true
      }
     },
 	}

@@ -70,20 +70,20 @@ export default {
 	background: #232b2e;
 	.htitle{
 		width: 1200px;
-		height: 40px;
+		height: 90px;
 		margin: 0 auto;
 		color: #fff;
 		font-family: fontBold;
-		font-size: 22px;
+		font-size: 35px;
 		position: relative;
 		margin-bottom: 30px;
 		&::after{
 			display: block;
 			position: absolute;
 			content: '';
-			width: 50px;
+			width: 75px;
 			height: 2px;
-			bottom: 0;
+			bottom: 35px;
 			background: #2ad8a0;
 		}
 	}
